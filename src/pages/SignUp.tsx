@@ -49,7 +49,7 @@ const SignUp = () => {
         <Form.Item<FieldType>
           label="Ф.И.О"
           name="fullName"
-          rules={[{ required: true, message: "Please input your login!" }]}
+          rules={[{ required: true, message: "Please input your F.I.O!" }]}
           className="text-sm text-black leading-[22px]"
         >
           <Input
@@ -81,7 +81,7 @@ const SignUp = () => {
           />
         </Form.Item>
         <div className="mb-4">
-          <Link to="/auth/signup" className=" text-linkColor font-normal text-sm leading-[22px]">Вход</Link>
+          <Link to="/auth/signin" className=" text-linkColor font-normal text-sm leading-[22px]">Вход</Link>
         </div>
       </div>
 

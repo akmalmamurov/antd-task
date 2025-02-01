@@ -8,6 +8,9 @@ export default {
         darkLime: "#7CB305",
         orochimaru: "#D9D9D9",
         linkColor: "#1890FF",
+        grayColor: "#FAFAFA",
+        titleColor: "#000000D9",
+        buttonColor: "#08979C"
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],

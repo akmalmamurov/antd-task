@@ -1,0 +1,7 @@
+.ant-modal-content {
+  padding: 0 !important;
+  border-radius: 4px !important;
+}
+.ant-form-item-label {
+  text-align: left !important;
+}

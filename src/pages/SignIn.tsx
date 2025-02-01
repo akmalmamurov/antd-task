@@ -79,7 +79,12 @@ const SignIn = () => {
             />
           </Form.Item>
           <div>
-            <Link to="/auth/signup">Регистрация</Link>
+            <Link
+              to="/auth/signup"
+              className=" text-linkColor font-normal text-sm leading-[22px]"
+            >
+              Регистрация
+            </Link>
           </div>
         </div>
 

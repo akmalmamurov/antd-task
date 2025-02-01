@@ -3,6 +3,8 @@ import MainLayout from "@/layouts/MainLayout";
 import HomePage from "@/pages/HomePage";
 import useStore from "@/context/store";
 import SignIn from "@/pages/SignIn";
+import AuthLayout from "./layouts/AuthLayout";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const auth = useStore((state) => state.auth);
@@ -12,10 +14,15 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route
           index
-          element={auth ? <HomePage /> : <Navigate to="/signin" />}
+          element={auth ? <HomePage /> : <Navigate to="/auth/signin" />} // ✅ To‘g‘ri URL
         />
       </Route>
-      <Route path="/signin" element={<SignIn />} />
+
+      <Route path="/auth" element={<AuthLayout />}>
+        <Route index element={<SignIn />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
+      </Route>
     </Routes>
   );
 }

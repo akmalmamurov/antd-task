@@ -27,7 +27,11 @@ const Header = () => {
           </button>
         </div>
       </Container>
-      <Dialog isModalOpen={isModalOpen} handleOpen={handleOpen} />
+      <Dialog
+        isModalOpen={isModalOpen}
+        handleOpen={handleOpen}
+        editData={undefined}
+      />
     </header>
   );
 };

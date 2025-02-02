@@ -2,11 +2,16 @@ import { Button, Form, Input, message, Modal } from "antd";
 import { IoMdClose } from "react-icons/io";
 import "./modal.css";
 import { useCreateData } from "@/hooks/createData";
+import { useUpdateData } from "@/hooks/updateData"; 
 import * as API from "@/constants/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useGetDataById } from "@/hooks/data-by-id";
+
 interface Props {
   isModalOpen: boolean;
   handleOpen: () => void;
+  editData: string | undefined; 
 }
 
 type FieldType = {
@@ -14,21 +19,63 @@ type FieldType = {
   count: number;
 };
 
-const Dialog = ({ isModalOpen, handleOpen }: Props) => {
+interface CompanyData {
+  id: string;
+  name: string;
+  count: number;
+}
+
+const Dialog = ({ isModalOpen, handleOpen, editData }: Props) => {
+  const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutate: createCompany } = useCreateData(API.CREATE_COMPANY);
+  const { mutate: updateCompany } = useUpdateData();
+
+  const { data } = useGetDataById<CompanyData>(editData);
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        name: data.name,
+        count: data.count,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [data, form]);
+
   const onFinish = (values: FieldType) => {
-    createCompany(
-      { newData: values, key: API.CREATE_COMPANY },
-      {
-        onSuccess: () => {
-          message.success("Successfully created!");
-          queryClient.invalidateQueries({ queryKey: ["companies/get-all"] });
-          handleOpen();
-        },
-      }
-    );
-    console.log("Success:", values);
+    if (editData) {
+      updateCompany(
+        { id: editData, newData: values },
+        {
+          onSuccess: () => {
+            message.success("Successfully updated!");
+            queryClient.invalidateQueries({ queryKey: ["companies/get-all"] });
+            handleOpen();
+            form.resetFields();
+          },
+          onError: (error) => {
+            console.error("Error updating data:", error);
+          },
+        }
+      );
+    } else {
+      createCompany(
+        { newData: values, key: API.CREATE_COMPANY },
+        {
+          onSuccess: () => {
+            message.success("Successfully created!");
+            queryClient.invalidateQueries({ queryKey: ["companies/get-all"] });
+            handleOpen();
+            form.resetFields();
+          },
+          onError: (error) => {
+            console.error("Error creating data:", error);
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -39,18 +86,17 @@ const Dialog = ({ isModalOpen, handleOpen }: Props) => {
       closeIcon={null}
       style={{ padding: 0 }}
     >
-      {/* Header */}
       <div className="flex justify-between items-center py-4 border-b px-6">
         <h2 className="font-bold text-xl text-black leading-[28px]">
-          Добавить компания
+          {editData ? "Изменить компанию" : "Добавить компанию"}
         </h2>
         <button onClick={handleOpen}>
           <IoMdClose className="text-2xl text-[#00000073]" />
         </button>
       </div>
 
-      {/* Form */}
       <Form
+        form={form}
         layout="horizontal"
         name="companyForm"
         labelCol={{ span: 10 }}
@@ -68,7 +114,7 @@ const Dialog = ({ isModalOpen, handleOpen }: Props) => {
           >
             <Input
               placeholder="Введите название"
-              className="rounded-none border border-orochimaru  "
+              className="rounded-none border border-orochimaru"
             />
           </Form.Item>
 
@@ -83,12 +129,11 @@ const Dialog = ({ isModalOpen, handleOpen }: Props) => {
             <Input
               placeholder="Введите количество"
               type="number"
-              className="rounded-none border border-orochimaru  "
+              className="rounded-none border border-orochimaru"
             />
           </Form.Item>
         </div>
 
-        {/* Submit button */}
         <Form.Item
           wrapperCol={{ span: 24 }}
           className="mb-0 border-t flex justify-center py-[10px]"
@@ -102,7 +147,7 @@ const Dialog = ({ isModalOpen, handleOpen }: Props) => {
               borderColor: "#007BFF",
             }}
           >
-            Добавить компания
+            {editData ? "Изменить компанию" : "Добавить компанию"}
           </Button>
         </Form.Item>
       </Form>

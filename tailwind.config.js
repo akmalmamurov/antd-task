@@ -10,7 +10,8 @@ export default {
         linkColor: "#1890FF",
         grayColor: "#FAFAFA",
         titleColor: "#000000D9",
-        buttonColor: "#08979C"
+        buttonColor: "#08979C",
+        dangerColor: "#FA2424",
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],

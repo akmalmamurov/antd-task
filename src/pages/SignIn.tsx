@@ -11,7 +11,7 @@ type FieldType = {
 };
 
 const SignIn = () => {
-  const { mutate, isLoading } = useCreateData<FieldType>(API.SIGN_IN);
+  const { mutate, isPending } = useCreateData<FieldType>(API.SIGN_IN);
   const navigate = useNavigate();
   const { setAuth } = useStore();
 
@@ -22,7 +22,7 @@ const SignIn = () => {
         onSuccess: (response) => {
           message.success("Successfully login!");
           navigate("/");
-          localStorage.setItem("token", response);
+          localStorage.setItem("token", response as string);
           setAuth(true);
         },
         onError: (error) => {
@@ -93,9 +93,9 @@ const SignIn = () => {
           className="mb-0 border-t flex justify-center py-[15px]"
         >
           <Button
+            loading={isPending}
             type="primary"
             htmlType="submit"
-            loading={isLoading}
             className="w-fit font-roboto py-[5px] px-4 text-sm leading-[22px] rounded-none text-white"
             style={{
               backgroundColor: "#7CB305",

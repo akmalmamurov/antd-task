@@ -6,14 +6,11 @@ type FieldType = {
   fullName: string;
   login: string;
   password: string;
-  isLoading: boolean;
 };
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { mutate: createData, isLoading } = useCreateData<FieldType>(
-    API.SIGN_UP
-  );
+  const { mutate: createData, isPending: isCreating } = useCreateData<FieldType>(API.SIGN_UP)
 
   const onFinish = (values: FieldType) => {
     createData(
@@ -92,6 +89,7 @@ const SignUp = () => {
         <Button
           type="primary"
           htmlType="submit"
+          loading={isCreating}
           className="w-fit font-roboto py-[5px] px-4 text-sm leading-[22px] rounded-none text-white"
           style={{
             backgroundColor: "#7CB305",
